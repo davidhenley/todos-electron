@@ -1,6 +1,7 @@
 const { app, BrowserWindow, Menu } = require('electron');
 
 let mainWindow;
+const macOS = process.platform === 'darwin';
 
 app.on('ready', () => {
   mainWindow = new BrowserWindow({});
@@ -17,6 +18,7 @@ const menuTemplate = [
       { label: 'New Todo' },
       {
         label: 'Quit',
+        accelerator: macOS ? 'Command+Q' : 'Ctrl+Q',
         click() {
           app.quit();
         }
@@ -25,6 +27,6 @@ const menuTemplate = [
   }
 ];
 
-if (process.platform === 'darwin') {
+if (macOS) {
   menuTemplate.unshift({});
 }
