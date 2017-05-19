@@ -1,6 +1,7 @@
 const { app, BrowserWindow, Menu } = require('electron');
 
 let mainWindow;
+let addWindow;
 const macOS = process.platform === 'darwin';
 
 app.on('ready', () => {
@@ -11,11 +12,23 @@ app.on('ready', () => {
   Menu.setApplicationMenu(mainMenu);
 });
 
+const createAddWindow = () => {
+  addWindow = new BrowserWindow({
+    width: 300,
+    height: 200,
+    title: 'Add New Todo'
+  });
+};
+
 const menuTemplate = [
   {
     label: 'File',
     submenu: [
-      { label: 'New Todo' },
+      {
+        label: 'New Todo',
+        accelerator: macOS ? 'Command+N' : 'Ctrl+N',
+        click() { createAddWindow(); }
+      },
       {
         label: 'Quit',
         accelerator: macOS ? 'Command+Q' : 'Ctrl+Q',
