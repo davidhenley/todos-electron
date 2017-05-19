@@ -6,6 +6,7 @@ const macOS = process.platform === 'darwin';
 
 app.on('ready', () => {
   mainWindow = new BrowserWindow({});
+  mainWindow.on('closed', () => app.quit());
   mainWindow.loadURL(`file://${__dirname}/main.html`);
 
   const mainMenu = Menu.buildFromTemplate(menuTemplate);
