@@ -45,3 +45,18 @@ const menuTemplate = [
 if (macOS) {
   menuTemplate.unshift({});
 }
+
+if (process.env.NODE_ENV !== 'production') {
+  menuTemplate.push({
+    label: 'View',
+    submenu: [
+      {
+        label: 'Toggle Developer Tools',
+        accelerator: macOS ? 'Command+Option+I' : 'Ctrl+Shift+I',
+        click(item, focusedWindow) {
+          focusedWindow.toggleDevTools();
+        }
+      }
+    ]
+  })
+}
