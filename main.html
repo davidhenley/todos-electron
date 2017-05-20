@@ -1,3 +1,20 @@
 <body>
   <h1>Todo App</h1>
+  <ul></ul>
+
+  <script>
+    const { ipcRenderer } = require('electron');
+    const list = document.querySelector('ul');
+
+    ipcRenderer.on('todo:add', (event, value) => {
+      const li = document.createElement('li');
+      const text = document.createTextNode(value);
+      li.appendChild(text);
+      list.appendChild(li);
+    });
+
+    ipcRenderer.on('todo:clear', () => {
+      list.innerHTML = '';
+    });
+  </script>
 </body>

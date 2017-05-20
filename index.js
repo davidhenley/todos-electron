@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain } = require('electron');
 
 let mainWindow;
 let addWindow;
@@ -20,7 +20,13 @@ const createAddWindow = () => {
     title: 'Add New Todo'
   });
   addWindow.loadURL(`file://${__dirname}/add.html`);
+  addWindow.on('closed', () => addWindow = null);
 };
+
+ipcMain.on('todo:add', (event, value) => {
+  mainWindow.webContents.send('todo:add', value);
+  addWindow.close();
+});
 
 const menuTemplate = [
   {
@@ -30,6 +36,13 @@ const menuTemplate = [
         label: 'New Todo',
         accelerator: macOS ? 'Command+N' : 'Ctrl+N',
         click() { createAddWindow(); }
+      },
+      {
+        label: 'Clear Todos',
+        accelerator: macOS ? 'Command+E' : 'Ctrl+E',
+        click() {
+          mainWindow.webContents.send('todo:clear');
+        }
       },
       {
         label: 'Quit',
@@ -50,6 +63,9 @@ if (process.env.NODE_ENV !== 'production') {
   menuTemplate.push({
     label: 'View',
     submenu: [
+      {
+        role: 'reload'
+      },
       {
         label: 'Toggle Developer Tools',
         accelerator: macOS ? 'Command+Option+I' : 'Ctrl+Shift+I',
